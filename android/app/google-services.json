@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "117178597527",
+    "project_id": "dsgo-jhlee",
+    "storage_bucket": "dsgo-jhlee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117178597527:android:c0e48ddecc1a067a4869d2",
+        "android_client_info": {
+          "package_name": "xyz.deokso.app.dsgo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117178597527-apno6085kiph7rsq5adu8kkkospsifj2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3attVLZrPa1uPfBgCAKaNO317oKObZ4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "117178597527-apno6085kiph7rsq5adu8kkkospsifj2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
