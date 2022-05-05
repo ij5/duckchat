@@ -29,6 +29,13 @@
             {
               "client_id": "117178597527-apno6085kiph7rsq5adu8kkkospsifj2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "117178597527-6660nur4giv79s27kh3tdolpe8c5h5h0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "xyz.deokso.app.dsgo"
+              }
             }
           ]
         }
