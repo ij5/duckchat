@@ -1,4 +1,6 @@
+import 'package:dsgo/chat.dart';
 import 'package:dsgo/home.dart';
+import 'package:dsgo/message.dart';
 import 'package:dsgo/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -46,15 +48,59 @@ void main() async {
 
 int _messageCount = 0;
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
   @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+
+  @override
+  void initState(){
+    super.initState();
+    FirebaseMessaging.instance
+      .getInitialMessage()
+      .then((RemoteMessage? message){
+        if(message != null) {
+          Navigator.pushNamed(context, '/chat', arguments: MessageArguments(message, true));
+        }
+      });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if(notification != null && android != null){
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode, 
+          notification.title, 
+          notification.body, 
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: 'launch_background'
+            )
+          ),
+        );
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
+      Navigator.pushNamed(context, '/chat', arguments: MessageArguments(message, true));
+    });
+  }
+
+  @override
   Widget build(BuildContext context){
-    return const MaterialApp(
+    return MaterialApp(
       title: "dsgo",
-      home: Home(),
+      // home: Home(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/': (context)=> const Home(),
+        '/chat': (context)=> const Chat(),
+      },
     );
   }
 }
