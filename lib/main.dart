@@ -1,13 +1,16 @@
 import 'package:dsgo/chat.dart';
 import 'package:dsgo/home.dart';
+import 'package:dsgo/login.dart';
 import 'package:dsgo/message.dart';
 import 'package:dsgo/provider.dart';
+import 'package:dsgo/register.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:page_transition/page_transition.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -24,7 +27,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   
   channel = const AndroidNotificationChannel(
-    'duckchat_high_importance_channel', '채팅', 
+    'duckchat_high_importance_channel', 'chat', 
     description: 'This channel is used for important notifications.',
     importance: Importance.high,
   );
@@ -97,9 +100,31 @@ class _AppState extends State<App> {
       title: "dsgo",
       // home: Home(),
       debugShowCheckedModeBanner: false,
-      routes: {
-        '/': (context)=> const Home(),
-        '/chat': (context)=> const Chat(),
+      // routes: {
+      //   '/': (context)=> const Home(),
+      //   '/chat': (context)=> const Chat(),
+      //   '/login': (context) => const Login(),
+      //   '/register': (context) => const Register(),
+      // },
+      onGenerateRoute: (settings){
+        switch(settings.name){
+          case '/':
+            return PageTransition(child: const Home(), type: PageTransitionType.bottomToTop);
+          case '/chat':
+            return PageTransition(child: const Chat(), type: PageTransitionType.bottomToTop);
+          case '/login':
+            return PageTransition(
+              child: const Login(), type: PageTransitionType.bottomToTop, 
+              curve: Curves.easeOutQuart, duration: const Duration(milliseconds: 500)
+            );
+          case '/register':
+            return PageTransition(
+              child: const Register(), type: PageTransitionType.bottomToTop,
+              curve: Curves.easeOutQuart, duration: const Duration(milliseconds: 500),
+            );
+          default:
+            return null;
+        }
       },
     );
   }

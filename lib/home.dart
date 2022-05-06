@@ -5,6 +5,8 @@ import 'package:dsgo/friends.dart';
 import 'package:dsgo/settings.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,7 +20,10 @@ enum _SelectedTab {friends, chat, settings}
 class _HomeState extends State<Home> {
   late Socket socket;
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   Future<void> run() async {
+    final SharedPreferences prefs = await _prefs;
     socket = await Socket.connect("10.42.0.1", 1818);
     print("Connected to: ${socket.remoteAddress.address}:${socket.remotePort}");
     socket.listen((Uint8List data){
@@ -29,6 +34,16 @@ class _HomeState extends State<Home> {
     }, onDone: (){
       print("server left.");
       socket.destroy();
+    });
+
+    var token = prefs.getString("token");
+    if(token == null) {
+      Navigator.pushReplacementNamed(context, '/login');
+      return;
+    }
+
+    socket.write({
+      'action': 'init'
     });
 
     setState(() {
